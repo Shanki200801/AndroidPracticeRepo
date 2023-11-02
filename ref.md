@@ -157,4 +157,6 @@ under main class
     String s = sharedPref.getString("key","default value");
 ```
 
-9.
+9. Maps
+
+10. SQLite
