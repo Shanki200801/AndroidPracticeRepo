@@ -1,0 +1,68 @@
+import android.content.ContentValues; 
+import android.content.Context; 
+import android.database.Cursor; 
+import android.database.sqlite.SQLiteDatabase; 
+import android.database.sqlite.SQLiteOpenHelper; 
+import androidx.annotation.NonNull; 
+import androidx.annotation.Nullable; 
+public class DBHelper extends SQLiteOpenHelper { 
+    public DBHelper(Context context) { 
+        super(context, "Userdata.db", null, 1); 
+    } 
+    @Override 
+    public void onCreate(SQLiteDatabase DB) { 
+        DB.execSQL("create Table Userdetails(name Text  PRIMARY KEY, 
+phone Text, email Text)  "); 
+    } 
+    @Override 
+    public void onUpgrade(SQLiteDatabase DB, int i, int i1) { 
+        DB.execSQL("drop table if exists Userdetails"); 
+    } 
+    public boolean insertuserdata(String name, String phone, String 
+email){ 
+        SQLiteDatabase DB = this.getWritableDatabase(); 
+        ContentValues cv = new ContentValues(); 
+        cv.put("name", name); 
+        cv.put("phone", phone); 
+        cv.put("email",email); 
+        long result = DB.insert("Userdetails", null, cv); 
+        return result!=-1; 
+    } 
+    public boolean updateuserdata(String name, String phone, String 
+email){ 
+
+
+48 
+
+ 
+
+        SQLiteDatabase DB = this.getWritableDatabase(); 
+        ContentValues cv = new ContentValues(); 
+        cv.put("name", name); 
+        cv.put("phone", phone); 
+        Cursor cursor = DB.rawQuery("select * from Userdetails where 
+name = ?", new String[] {name}); 
+        if (cursor.getCount()>0){ 
+            long result = DB.update("Userdetails", cv, "name=?", new 
+String[]{name}); 
+            return (result!=-1); 
+        } 
+        return false; 
+    } 
+    public boolean deletedata(String name){ 
+        SQLiteDatabase DB = this.getWritableDatabase(); 
+        Cursor cursor = DB.rawQuery("select * from Userdetails where 
+name = ?", new String[] {name}); 
+        if (cursor.getCount()>0){ 
+            long result = DB.delete("Userdetails", "name=?", new 
+String[]{name}); 
+            return (result!=-1); 
+        } 
+        return false; 
+    } 
+    public Cursor getdata(){ 
+        SQLiteDatabase DB = this.getWritableDatabase(); 
+        Cursor cursor = DB.rawQuery("select * from Userdetails", 
+null); 
+        return cursor; 
+    }} 

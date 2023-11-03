@@ -1,0 +1,120 @@
+public class MainActivity extends AppCompatActivity { 
+ 
+    EditText name, email, phone; 
+    Button insert, update, delete, view; 
+    DBHelper DB; 
+    @Override 
+    protected void onCreate(Bundle savedInstanceState) { 
+        super.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_main); 
+        name = findViewById(R.id.name); 
+        email = findViewById(R.id.email); 
+        phone = findViewById(R.id.phone); 
+        insert = findViewById(R.id.insert_btn); 
+        update = findViewById(R.id.update_btn); 
+        delete = findViewById(R.id.delete_btn); 
+        view = findViewById(R.id.view_btn); 
+        DB = new DBHelper(this); 
+ 
+
+
+46 
+
+ 
+
+        insert.setOnClickListener(new View.OnClickListener() { 
+            @Override 
+            public void onClick(View view) { 
+                String nameTxt = name.getText().toString(); 
+                String emailTxt = email.getText().toString(); 
+                String phoneTxt = phone.getText().toString(); 
+ 
+                if (phoneTxt.length()!=10){ 
+                    Toast.makeText(MainActivity.this, "invalid phone 
+number", Toast.LENGTH_SHORT); 
+                    return; 
+                } 
+                if (emailTxt.indexOf("@")<0){ 
+                    Toast.makeText(MainActivity.this, "invalid 
+email", Toast.LENGTH_SHORT); 
+ 
+                    return; 
+                } 
+                Boolean checkinsertdata = 
+DB.insertuserdata(nameTxt,phoneTxt, emailTxt ); 
+                if(checkinsertdata){ 
+                    Toast.makeText(MainActivity.this, "New entry 
+made", Toast.LENGTH_LONG).show(); 
+                } 
+                Toast.makeText(MainActivity.this, "Entry failed", 
+Toast.LENGTH_LONG).show(); 
+ 
+            } 
+        }); 
+ 
+        update.setOnClickListener(new View.OnClickListener() { 
+            @Override 
+            public void onClick(View view) { 
+                String nameTxt = name.getText().toString(); 
+                String emailTxt = email.getText().toString(); 
+                String phoneTxt = phone.getText().toString(); 
+ 
+                Boolean checkupdatedata = 
+DB.updateuserdata(nameTxt,phoneTxt, emailTxt); 
+                if(checkupdatedata){ 
+                    Toast.makeText(MainActivity.this, "New Update 
+made", Toast.LENGTH_LONG).show(); 
+                }else 
+                Toast.makeText(MainActivity.this, "update failed", 
+Toast.LENGTH_LONG).show(); 
+            } 
+        }); 
+ 
+        delete.setOnClickListener(new View.OnClickListener() { 
+            @Override 
+            public void onClick(View view) { 
+                String nameTxt = name.getText().toString(); 
+                Boolean checkdeletedata = DB.deletedata(nameTxt); 
+                if(checkdeletedata){ 
+                    Toast.makeText(MainActivity.this, "delete made", 
+Toast.LENGTH_LONG).show(); 
+                }else 
+                Toast.makeText(MainActivity.this, "delete failed", 
+Toast.LENGTH_LONG).show(); 
+            } 
+        }); 
+ 
+        view.setOnClickListener(new View.OnClickListener() { 
+
+
+47 
+
+ 
+
+            @Override 
+            public void onClick(View view) { 
+                Cursor res = DB.getdata(); 
+                if(res.getCount() == 0){ 
+                    Toast.makeText(MainActivity.this, "No entries 
+present", Toast.LENGTH_LONG).show(); 
+                    return; 
+                } 
+                StringBuffer buffer = new StringBuffer(); 
+                while(res.moveToNext()){ 
+                    buffer.append("name : "+ res.getString(0)+"\n"); 
+                    buffer.append("phone : "+ res.getString(1)+"\n"); 
+                    buffer.append("email : "+ 
+res.getString(2)+"\n\n"); 
+                } 
+                AlertDialog.Builder builder = new 
+AlertDialog.Builder(MainActivity.this); 
+                builder.setCancelable(true); 
+                builder.setTitle("User entries"); 
+                builder.setMessage(buffer.toString()); 
+                builder.show(); 
+                Toast.makeText(MainActivity.this, "update failed", 
+Toast.LENGTH_LONG).show(); 
+            } 
+        }); 
+    } 
+} 
