@@ -46,8 +46,8 @@ implementation 'androidx.core:core-splashscreen:1.0.1'
 4. Intents syntax
 
 ```java
-Intent intent  = new Intent(Intent.ACTION_VIEW);
-intent.setData(Uri.parse("website"));
+Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.geeksforgeeks.org/implicit-and-explicit-intents-in-android-with-examples/"));
+startActivity(intent);
 
 Intent intent2 = new Intent(this, SecondActivity.class);
 startActivity(intent2)
